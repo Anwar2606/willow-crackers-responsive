@@ -12,12 +12,12 @@ const firebaseConfig = {
   // messagingSenderId: "993422185891",
   // appId: "1:993422185891:web:055fc6f1b229c1b9e57616"
   //testing
-  apiKey: "AIzaSyCTmFMUSQL_lvxZSGzihrx5G7AypB4Uk5Q",
-  authDomain: "testing-855ce.firebaseapp.com",
-  projectId: "testing-855ce",
-  storageBucket: "testing-855ce.appspot.com",
-  messagingSenderId: "1086229411180",
-  appId: "1:1086229411180:web:4a835dadcfb73b08a42f49" 
+  // apiKey: "AIzaSyCTmFMUSQL_lvxZSGzihrx5G7AypB4Uk5Q",
+  // authDomain: "testing-855ce.firebaseapp.com",
+  // projectId: "testing-855ce",
+  // storageBucket: "testing-855ce.appspot.com",
+  // messagingSenderId: "1086229411180",
+  // appId: "1:1086229411180:web:4a835dadcfb73b08a42f49" 
   
     //main
                

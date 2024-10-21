@@ -1,239 +1,3 @@
-// import React, { useState, useEffect } from 'react';
-// import { collection, getDocs, updateDoc, doc } from 'firebase/firestore';
-// import { db } from '../firebase'; // Adjust the path to your Firebase config
-// import { FaEdit } from 'react-icons/fa'; // For Edit icon
-// import './EditBill.css';
-
-// const EditBillPage = () => {
-//   const [bills, setBills] = useState([]);
-//   const [editBill, setEditBill] = useState(null); // Stores the selected bill for editing
-//   const [updatedDetails, setUpdatedDetails] = useState({}); // Holds updated bill details
-//   const [isModalOpen, setIsModalOpen] = useState(false); // Controls modal visibility
-
-//   // Fetch bills from Firebase on component mount
-// //   useEffect(() => {
-// //     const fetchBills = async () => {
-// //       try {
-// //         const billingSnapshot = await getDocs(collection(db, 'billing'));
-// //         const billsData = billingSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-// //         setBills(billsData);
-// //       } catch (error) {
-// //         console.error('Error fetching bills:', error);
-// //       }
-// //     };
-// //     fetchBills();
-// //   }, []);
-// useEffect(() => {
-//     const fetchBills = async () => {
-//       try {
-//         // Fetching bills from 'billing' collection
-//         const billingSnapshot = await getDocs(collection(db, 'billing'));
-//         const billingData = billingSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  
-//         // Fetching bills from 'customerBilling' collection
-//         const customerBillingSnapshot = await getDocs(collection(db, 'customerBilling'));
-//         const customerBillingData = customerBillingSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-  
-//         // Combine both collections into a single array
-//         const allBills = [...billingData, ...customerBillingData];
-        
-//         // Set the combined bills data to state
-//         setBills(allBills);
-//       } catch (error) {
-//         console.error('Error fetching bills:', error);
-//       }
-//     };
-    
-//     fetchBills();
-//   }, []);
-  
-//   // Handle opening the edit modal
-//   const handleEdit = (bill) => {
-//     setEditBill(bill);
-//     setUpdatedDetails(bill); // Pre-fill the form with current values
-//     setIsModalOpen(true);
-//   };
-
-//   // Handle form input changes
-//   const handleInputChange = (e, index, field) => {
-//     const { name, value } = e.target;
-
-//     // If editing product details
-//     if (field === 'product') {
-//       const updatedProducts = [...updatedDetails.productsDetails];
-//       updatedProducts[index][name] = value;
-
-//       // Calculate the total for the product
-//       if (name === 'quantity' || name === 'saleprice') {
-//         const quantity = updatedProducts[index].quantity || 0;
-//         const price = updatedProducts[index].saleprice || 0;
-//         updatedProducts[index].total = quantity * price;
-//       }
-
-//       setUpdatedDetails((prevDetails) => ({
-//         ...prevDetails,
-//         productsDetails: updatedProducts,
-//       }));
-//     } else {
-//       // If editing other bill details
-//       setUpdatedDetails((prevDetails) => ({
-//         ...prevDetails,
-//         [name]: value,
-//       }));
-//     }
-//   };
-
-//   // Calculate grand total and total amount
-//   const calculateTotals = () => {
-//     const totalAmount = updatedDetails.productsDetails.reduce(
-//       (acc, product) => acc + (product.quantity * product.saleprice || 0),
-//       0
-//     );
-//     const grandTotal = totalAmount + (updatedDetails.additionalCharges || 0); // Example: add additional charges if any
-
-//     setUpdatedDetails((prevDetails) => ({
-//       ...prevDetails,
-//       totalAmount,
-//       grandTotal,
-//     }));
-//   };
-
-//   // Handle form submission to update the bill details
-//   const handleSubmit = async () => {
-//     if (editBill && updatedDetails) {
-//       try {
-//         const billDocRef = doc(db, 'billing', editBill.id); // Update the bill by id
-//         await updateDoc(billDocRef, updatedDetails); // Update the document in Firebase
-
-//         // Update the state
-//         setBills((prevBills) =>
-//           prevBills.map((bill) =>
-//             bill.id === editBill.id ? { ...bill, ...updatedDetails } : bill
-//           )
-//         );
-//         setIsModalOpen(false); // Close the modal
-//         setEditBill(null); // Clear selected bill
-//       } catch (error) {
-//         console.error('Error updating bill:', error.message);
-//       }
-//     }
-//   };
-
-//   return (
-//     <div className="edit-bill-page">
-//       <h1>All Bills</h1>
-
-//       <table className="bills-table">
-//         <thead>
-//           <tr>
-//             <th>Invoice Number</th>
-//             <th>Customer Name</th>
-//             <th>Total Amount</th>
-//             <th>Grand Total</th>
-//             <th>Actions</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {bills.map((bill) => (
-//             <tr key={bill.id}>
-//               <td>{bill.invoiceNumber}</td>
-//               <td>{bill.customerName}</td>
-//               <td>{bill.totalAmount}</td>
-//               <td>{bill.grandTotal}</td>
-//               <td>
-//                 <FaEdit
-//                   className="edit-icon"
-//                   onClick={() => handleEdit(bill)}
-//                   style={{ cursor: 'pointer' }}
-//                 />
-//               </td>
-//             </tr>
-//           ))}
-//         </tbody>
-//       </table>
-
-//       {/* Modal for editing */}
-//       {isModalOpen && (
-//         <div className="modal">
-//           <div className="modal-content">
-//             <h2>Edit Bill</h2>
-
-//             {/* Customer name */}
-//             <label>Customer Name:</label>
-//             <input
-//               type="text"
-//               name="customerName"
-//               value={updatedDetails.customerName || ''}
-//               onChange={(e) => handleInputChange(e)}
-//             />
-
-//             {/* Product details */}
-//             <h3>Products</h3>
-//             {updatedDetails.productsDetails.map((product, index) => (
-//               <div key={index}>
-//                 <label>Product Name:</label>
-//                 <input
-//                   type="text"
-//                   name="name"
-//                   value={product.name || ''}
-//                   onChange={(e) => handleInputChange(e, index, 'product')}
-//                 />
-
-//                 <label>Quantity:</label>
-//                 <input
-//                   type="number"
-//                   name="quantity"
-//                   value={product.quantity || ''}
-//                   onChange={(e) => handleInputChange(e, index, 'product')}
-//                 />
-
-//                 <label>Price:</label>
-//                 <input
-//                   type="number"
-//                   name="saleprice"
-//                   value={product.saleprice || ''}
-//                   onChange={(e) => handleInputChange(e, index, 'product')}
-//                 />
-
-//                 <label>Total:</label>
-//                 <input
-//                   type="number"
-//                   name="total"
-//                   value={product.total || ''}
-//                   readOnly
-//                 />
-//               </div>
-//             ))}
-
-//             {/* Total and Grand Total */}
-//             <label>Total Amount:</label>
-//             <input
-//               type="number"
-//               name="totalAmount"
-//               value={updatedDetails.totalAmount || ''}
-//               onChange={(e) => handleInputChange(e)}
-//               onBlur={calculateTotals} // Recalculate on blur
-//             />
-
-//             <label>Grand Total:</label>
-//             <input
-//               type="number"
-//               name="grandTotal"
-//               value={updatedDetails.grandTotal || ''}
-//               onChange={(e) => handleInputChange(e)}
-//             />
-
-//             {/* Submit and Cancel buttons */}
-//             <button onClick={handleSubmit}>Save</button>
-//             <button onClick={() => setIsModalOpen(false)}>Cancel</button>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default EditBillPage;
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs, updateDoc, doc, Timestamp } from 'firebase/firestore';
 import { db } from '../firebase'; // Adjust the path to your Firebase config
@@ -273,74 +37,6 @@ const EditBillPage = () => {
     setIsModalOpen(true);
   };
 
-//   const handleInputChange = (e, index, field) => {
-//     const { name, value } = e.target;
-
-//     if (field === 'product') {
-//       const updatedProducts = [...updatedDetails.productsDetails];
-//       updatedProducts[index][name] = value;
-
-//       if (name === 'quantity' || name === 'saleprice') {
-//         const quantity = updatedProducts[index].quantity || 0;
-//         const price = updatedProducts[index].saleprice || 0;
-//         updatedProducts[index].total = quantity * price;
-//       }
-
-//       setUpdatedDetails((prevDetails) => ({
-//         ...prevDetails,
-//         productsDetails: updatedProducts,
-//       }));
-//     } else {
-//       setUpdatedDetails((prevDetails) => ({
-//         ...prevDetails,
-//         [name]: value,
-//       }));
-//     }
-//   };
-
-//   const calculateTotals = () => {
-//     const totalAmount = updatedDetails.productsDetails.reduce(
-//       (acc, product) => acc + (product.quantity * product.saleprice || 0),
-//       0
-//     );
-//     const grandTotal = totalAmount + (updatedDetails.additionalCharges || 0);
-
-//     setUpdatedDetails((prevDetails) => ({
-//       ...prevDetails,
-//       totalAmount,
-//       grandTotal,
-//     }));
-//   };
-// const handleInputChange = (e, index, field) => {
-//     const { name, value } = e.target;
-  
-//     if (field === 'product') {
-//       const updatedProducts = [...updatedDetails.productsDetails];
-//       updatedProducts[index][name] = value;
-  
-//       // Calculate the total for the updated product
-//       if (name === 'quantity' || name === 'saleprice') {
-//         const quantity = updatedProducts[index].quantity || 0;
-//         const price = updatedProducts[index].saleprice || 0;
-//         updatedProducts[index].total = quantity * price;
-//       }
-  
-//       // Update the state with the new product details
-//       setUpdatedDetails((prevDetails) => ({
-//         ...prevDetails,
-//         productsDetails: updatedProducts,
-//       }));
-  
-//       // Recalculate totals after the product is updated
-//       calculateTotals(updatedProducts);
-//     } else {
-//       // Handle other inputs like totalAmount, cgstAmount, etc.
-//       setUpdatedDetails((prevDetails) => ({
-//         ...prevDetails,
-//         [name]: value,
-//       }));
-//     }
-//   };
 const handleInputChange = (e, index, field) => {
   const { name, value } = e.target;
 
@@ -444,23 +140,40 @@ const handleInputChange = (e, index, field) => {
 
 //     pdf.save(`Invoice_Copies_${bill.invoiceNumber}.pdf`); // Save the PDF with the invoice number
 //   };
+// const formatDate = (createdAt) => {
+//     let createdAtDate;
+  
+//     // Convert createdAt to a Date object
+//     if (createdAt instanceof Timestamp) {
+//       createdAtDate = createdAt.toDate();
+//     } else if (typeof createdAt === 'string' || createdAt instanceof Date) {
+//       createdAtDate = new Date(createdAt);
+//     } else {
+//       return 'Invalid Date'; // Handle cases where createdAt is not valid
+//     }
+  
+//     // Format the date as 'MM/DD/YYYY' or any desired format
+//     return !isNaN(createdAtDate.getTime())
+//       ? createdAtDate.toLocaleDateString() // Returns only the date portion (e.g., "8/27/2024")
+//       : 'Invalid Date';
+//   };
 const formatDate = (createdAt) => {
-    let createdAtDate;
-  
-    // Convert createdAt to a Date object
-    if (createdAt instanceof Timestamp) {
-      createdAtDate = createdAt.toDate();
-    } else if (typeof createdAt === 'string' || createdAt instanceof Date) {
-      createdAtDate = new Date(createdAt);
-    } else {
-      return 'Invalid Date'; // Handle cases where createdAt is not valid
-    }
-  
-    // Format the date as 'MM/DD/YYYY' or any desired format
-    return !isNaN(createdAtDate.getTime())
-      ? createdAtDate.toLocaleDateString() // Returns only the date portion (e.g., "8/27/2024")
-      : 'Invalid Date';
-  };
+  let createdAtDate;
+
+  // Convert createdAt to a Date object
+  if (createdAt instanceof Timestamp) {
+    createdAtDate = createdAt.toDate();
+  } else if (typeof createdAt === 'string' || createdAt instanceof Date) {
+    createdAtDate = new Date(createdAt);
+  } else {
+    return 'Invalid Date'; // Handle cases where createdAt is not valid
+  }
+
+  // Format the date as 'MM/DD/YYYY' or any desired format
+  return !isNaN(createdAtDate.getTime())
+    ? createdAtDate.toLocaleDateString() // Returns only the date portion (e.g., "8/27/2024")
+    : 'Invalid Date';
+};
 const downloadAllCopies = (bill) => {
     const doc = new jsPDF();
     const copies = ['Transport Copy', 'Office Copy', 'Customer Copy', 'Sales Copy'];
@@ -473,7 +186,11 @@ const downloadAllCopies = (bill) => {
       }
   
       
-      const formattedDate = formatDate(bill.createdAt);
+      const billDate = updatedDetails.billDate || bill.createdAt;
+
+  // Format the date using the updated or fallback date
+  const formattedDate = formatDate(billDate);
+
   
      
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -745,12 +462,28 @@ const downloadAllCopies = (bill) => {
 
             {/* Customer name */}
             <label>Bill Date:</label>
-      <input
+      {/* <input
         type="date"
         name="billDate"
         value={updatedDetails.billDate || ''}
         onChange={(e) => handleInputChange(e)}
-      />
+      /> */}
+      <input
+  type="date"
+  name="billDate"
+  value={updatedDetails.billDate || ''}
+  onChange={(e) => handleInputChange(e)}
+  style={{
+    width: '90%',
+    padding: '10px',
+    border: '2px solid #ccc',
+    borderRadius: '5px',
+    fontSize: '16px',
+    backgroundColor: '#f9f9f9',
+    transition: 'border 0.3s ease, background-color 0.3s ease',
+  }}
+/>
+
             <label>Customer Name:</label>
             <input
               type="text"
