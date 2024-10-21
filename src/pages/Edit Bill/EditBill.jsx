@@ -237,7 +237,7 @@
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs, updateDoc, doc, Timestamp } from 'firebase/firestore';
 import { db } from '../firebase'; // Adjust the path to your Firebase config
-import { FaEdit } from 'react-icons/fa'; // For Edit icon
+import { FaDownload, FaEdit } from 'react-icons/fa'; // For Edit icon
 import { jsPDF } from 'jspdf'; // Import jsPDF for generating PDFs
 import './EditBill.css';
 import { formatDate } from 'date-fns';
@@ -673,7 +673,7 @@ const downloadAllCopies = (bill) => {
             <th>Invoice Number</th>
             <th>Customer Name</th>
             <th>Total Amount</th>
-            <th>Grand Total</th>
+            
             <th>Actions</th>
           </tr>
         </thead>
@@ -683,7 +683,7 @@ const downloadAllCopies = (bill) => {
               <td>{bill.invoiceNumber}</td>
               <td>{bill.customerName}</td>
               <td>{bill.totalAmount}</td>
-              <td>{bill.grandTotal}</td>
+              
               <td>
                 <FaEdit
                   className="edit-icon"
@@ -691,9 +691,9 @@ const downloadAllCopies = (bill) => {
                   style={{ cursor: 'pointer' }}
                 />
                 {/* Download All Copies Button */}
-                <button onClick={() => downloadAllCopies(bill)} style={{ marginLeft: '10px' }}>
-                  Download All Copies
-                </button>
+                <FaDownload onClick={() => downloadAllCopies(bill)} style={{ marginLeft: '10px' }}>
+                 
+                </FaDownload>
               </td>
             </tr>
           ))}
