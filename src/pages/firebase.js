@@ -40,12 +40,12 @@ const firebaseConfig = {
 
 
   //main 3
-  // apiKey: "AIzaSyDH8o9iOyL5K0BlWn38Bmc1BN0beiAA-a0",
-  // authDomain: "billing-software-3.firebaseapp.com",
-  // projectId: "billing-software-3",
-  // storageBucket: "billing-software-3.appspot.com",
-  // messagingSenderId: "752627968861",
-  // appId: "1:752627968861:web:4789d35435fb9e366956b4"  
+  apiKey: "AIzaSyDH8o9iOyL5K0BlWn38Bmc1BN0beiAA-a0",
+  authDomain: "billing-software-3.firebaseapp.com",
+  projectId: "billing-software-3",
+  storageBucket: "billing-software-3.appspot.com",
+  messagingSenderId: "752627968861",
+  appId: "1:752627968861:web:4789d35435fb9e366956b4"  
 };
 
 const app = initializeApp(firebaseConfig);
