@@ -342,13 +342,56 @@
 }
 
 /* Styling for each chart and progress component */
+/* .sales-comparison-chart,
+.revenue-progress {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+} */
 .sales-comparison-chart,
 .revenue-progress {
   background: #ffffff;
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Full width for any screen size */
+  max-width: 100%; /* Maximum width to ensure responsiveness */
+  margin: 20px auto; /* Center the elements */
+  box-sizing: border-box;
 }
+
+/* Tablet (768px and below) */
+@media screen and (max-width: 768px) {
+  .sales-comparison-chart,
+  .revenue-progress {
+    padding: 15px; /* Slightly reduce padding for tablets */
+    max-width: 95%; /* Make the element fit within 95% of the screen */
+    margin: 15px auto; /* Adjust margin for better centering */
+  }
+}
+
+/* Mobile (480px and below) */
+@media screen and (max-width: 480px) {
+  .sales-comparison-chart,
+  .revenue-progress {
+    padding: 10px; /* Reduce padding for smaller mobile screens */
+    max-width: 100%; /* Full width for mobile devices */
+    margin: 10px auto; /* Less margin to optimize space */
+  }
+}
+
+/* Extra small devices (360px and below) */
+@media screen and (max-width: 360px) {
+  .sales-comparison-chart,
+  .revenue-progress {
+    padding: 8px; /* Further reduce padding for extra small devices */
+    max-width: 100%; /* Ensure full width for very small screens */
+    margin: 5px auto; /* Minimize margin to save space */
+  }
+}
+
+
 
 /* Table Container */
 .table-container {

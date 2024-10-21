@@ -4,11 +4,12 @@
   align-items: center;
   border-radius: 10px;
   padding: 20px;
-  margin: 20px auto; /* Center on the page */
+  margin: 0 auto; /* Center on the page */
   width: 100%; /* Full width by default */
-  max-width: 900px; /* Limit width on larger screens */
+  max-width: 100%; /* Max width for large screens */
   height: auto; /* Adjust height automatically */
   transition: transform 0.3s ease;
+  box-sizing: border-box; /* Ensure padding does not affect width */
 }
 
 .chart-container:hover {
@@ -45,6 +46,7 @@
 @media screen and (min-width: 1024px) {
   .chart-container {
     max-width: 900px; /* Fixed max-width for large screens */
+    padding: 20px;
   }
 }
 
@@ -55,11 +57,12 @@
   }
   .chart-container {
     padding: 15px;
-    width: 95%; /* Slightly smaller width for tablets */
+    width: 95%; /* Full width for tablets */
+    max-width: 700px; /* Adjust max-width for tablets */
   }
 }
 
-/* Responsive for mobile devices */
+/* Responsive for small mobile devices (480px and below) */
 @media screen and (max-width: 480px) {
   .chart-header {
     font-size: 18px;
@@ -68,6 +71,20 @@
   .chart-container {
     padding: 10px;
     width: 100%; /* Full width for mobile */
-    margin: 0; /* Remove margin to fit properly */
+    margin: 0 auto; /* Center for mobile */
+    max-width: 100%; /* Full width for mobile */
+  }
+}
+
+/* Extra small mobile devices (360px and below) */
+@media screen and (max-width: 360px) {
+  .chart-header {
+    font-size: 16px;
+  }
+  .chart-container {
+    padding: 8px;
+    margin: 0 auto;
+    width: 100%; /* Full width for smaller screens */
+    max-width: 100%; /* Ensure full width on smallest screens */
   }
 }
