@@ -311,36 +311,73 @@ const EditBillPage = () => {
 //       grandTotal,
 //     }));
 //   };
+// const handleInputChange = (e, index, field) => {
+//     const { name, value } = e.target;
+  
+//     if (field === 'product') {
+//       const updatedProducts = [...updatedDetails.productsDetails];
+//       updatedProducts[index][name] = value;
+  
+//       // Calculate the total for the updated product
+//       if (name === 'quantity' || name === 'saleprice') {
+//         const quantity = updatedProducts[index].quantity || 0;
+//         const price = updatedProducts[index].saleprice || 0;
+//         updatedProducts[index].total = quantity * price;
+//       }
+  
+//       // Update the state with the new product details
+//       setUpdatedDetails((prevDetails) => ({
+//         ...prevDetails,
+//         productsDetails: updatedProducts,
+//       }));
+  
+//       // Recalculate totals after the product is updated
+//       calculateTotals(updatedProducts);
+//     } else {
+//       // Handle other inputs like totalAmount, cgstAmount, etc.
+//       setUpdatedDetails((prevDetails) => ({
+//         ...prevDetails,
+//         [name]: value,
+//       }));
+//     }
+//   };
 const handleInputChange = (e, index, field) => {
-    const { name, value } = e.target;
-  
-    if (field === 'product') {
-      const updatedProducts = [...updatedDetails.productsDetails];
-      updatedProducts[index][name] = value;
-  
-      // Calculate the total for the updated product
-      if (name === 'quantity' || name === 'saleprice') {
-        const quantity = updatedProducts[index].quantity || 0;
-        const price = updatedProducts[index].saleprice || 0;
-        updatedProducts[index].total = quantity * price;
-      }
-  
-      // Update the state with the new product details
-      setUpdatedDetails((prevDetails) => ({
-        ...prevDetails,
-        productsDetails: updatedProducts,
-      }));
-  
-      // Recalculate totals after the product is updated
-      calculateTotals(updatedProducts);
-    } else {
-      // Handle other inputs like totalAmount, cgstAmount, etc.
-      setUpdatedDetails((prevDetails) => ({
-        ...prevDetails,
-        [name]: value,
-      }));
+  const { name, value } = e.target;
+
+  if (field === 'product') {
+    const updatedProducts = [...updatedDetails.productsDetails];
+    updatedProducts[index][name] = value;
+
+    // Calculate the total for the updated product
+    if (name === 'quantity' || name === 'saleprice') {
+      const quantity = updatedProducts[index].quantity || 0;
+      const price = updatedProducts[index].saleprice || 0;
+      updatedProducts[index].total = quantity * price;
     }
-  };
+
+    // Update the state with the new product details
+    setUpdatedDetails((prevDetails) => ({
+      ...prevDetails,
+      productsDetails: updatedProducts,
+    }));
+
+    // Recalculate totals after the product is updated
+    calculateTotals(updatedProducts);
+  } else if (name === 'billDate') {
+    // Handle date change separately
+    setUpdatedDetails((prevDetails) => ({
+      ...prevDetails,
+      billDate: value, // Update the date field
+    }));
+  } else {
+    // Handle other inputs like totalAmount, cgstAmount, etc.
+    setUpdatedDetails((prevDetails) => ({
+      ...prevDetails,
+      [name]: value,
+    }));
+  }
+};
+
   
   // Function to calculate total, CGST, SGST, and Grand Total
   const calculateTotals = (products) => {
@@ -707,6 +744,13 @@ const downloadAllCopies = (bill) => {
             <h2>Edit Bill</h2>
 
             {/* Customer name */}
+            <label>Bill Date:</label>
+      <input
+        type="date"
+        name="billDate"
+        value={updatedDetails.billDate || ''}
+        onChange={(e) => handleInputChange(e)}
+      />
             <label>Customer Name:</label>
             <input
               type="text"
